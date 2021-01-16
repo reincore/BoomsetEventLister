@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/Boomset Logo.png">
+    <img alt="Boomset logo" src="./assets/Boomset Logo.png">
     <EventDashboard msg="All events:"/>
   </div>
 </template>
