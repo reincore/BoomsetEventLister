@@ -1,14 +1,16 @@
 <template>
   <div class="dashboard-container">
     <h1> All events: </h1>
-    <div class="card-container">
+    <div class="dashboard-container__cards">
       <div v-if="eventList">
         <div v-for="event in eventList" :key="event.id" class="card" @click="() => goEventDetail(event.id)">
           <h3>{{ event.name }}</h3> 
           <h4>{{ event.id}}</h4>
         </div> 
       </div>
-      <Loader v-else />
+      <div v-else class="dashboard-container__loader">
+       <Loader />
+      </div>
     </div>
   </div>
 </template>
@@ -19,11 +21,6 @@ import { getEventsList } from "../services/apiRequests";
 
 export default {
   name: 'EventDashboard',
-  watch: {
-    "$route" (to, from) {
-      alert(to.params.eventId, from.params.eventId);
-    }
-  },
   mounted() {
     getEventsList()
       .then(response => {
@@ -40,7 +37,7 @@ export default {
     },
   methods: {
     goEventDetail(eventId) {
-      this.$router.push(`/eventDetail/:${eventId}`);
+      this.$router.push(`eventDetail/${eventId}`).catch(()=>{});
     } 
   },
    components: {
@@ -51,37 +48,40 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.dashboard-container{
-  display: flex;
-  flex-direction: column;
-  .card-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-    .card {
+  .dashboard-container{
     display: flex;
+    flex-direction: column;
+    margin-top:2rem;
+
+    &__loader{
+      margin-top: 2rem;
+    }
+
+    &__cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    cursor: pointer;
-    width: 40rem;
-    height: 8rem;
-    background: white;
-    margin: 1.5rem;
-    box-shadow: 0px 0px 0px grey;
-    -webkit-transition:  box-shadow .3s ease-out;
-    box-shadow: .8px .9px 3px grey;
-    border-radius: 6px;
+    color: #42b983;
 
-      &:hover {
-        box-shadow: 1px 8px 20px grey;
-        -webkit-transition:  box-shadow .3s ease-in;
-      }
+      .card {
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+      width: 40rem;
+      height: 8rem;
+      background: white;
+      margin: 1.5rem;
+      box-shadow: 0px 0px 0px grey;
+      -webkit-transition:  box-shadow .3s ease-out;
+      box-shadow: .8px .9px 3px grey;
+      border-radius: 6px;
 
-      h1, h2, h3, h4, h5, h6 {
-        color: #42b983;
+        &:hover {
+          box-shadow: 1px 8px 20px grey;
+          -webkit-transition:  box-shadow .3s ease-in;
+        }
       }
     }
   }
-}
 </style>

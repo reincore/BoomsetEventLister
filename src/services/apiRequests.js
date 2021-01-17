@@ -1,5 +1,5 @@
 import axios from "axios";
-import helpers from "./helpers";
+import * as helpers from "./helpers";
 import * as paths from "../static/paths";
 
 const TIMEOUT_LIMIT = 30000;
