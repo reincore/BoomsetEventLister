@@ -1,22 +1,26 @@
 <template>
   <div id="app">
-    <img alt="Boomset logo" src="./assets/Boomset Logo.png">
-    <EventDashboard msg="All events:"/>
+    <img class="main-logo" alt="Boomset logo" src="./assets/Boomset Logo.png" @click="goEventDetail">
+    <hr>
+    <router-link to="/">Home</router-link>
+    <hr>
+      <router-view></router-view>
   </div>
 </template>
 
 <script>
-import EventDashboard from './components/EventDashboard.vue'
 
 export default {
   name: 'App',
-  components: {
-    EventDashboard
+  methods: {
+    goEventDetail() {
+      this.$router.push("/");
+    } 
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,5 +28,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
+  .main-logo{
+    cursor: pointer;  
+  }
 }
 </style>

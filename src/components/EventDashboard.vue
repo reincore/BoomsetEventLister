@@ -1,40 +1,50 @@
 <template>
   <div class="dashboard-container">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <h1> All events: </h1>
+    <div class="card-container">
+      <div v-if="eventList">
+        <div v-for="event in eventList" :key="event.id" class="card" @click="() => goEventDetail(event.id)">
+          <h3>{{ event.name }}</h3> 
+          <h4>{{ event.id}}</h4>
+        </div> 
+      </div>
+      <Loader v-else />
+    </div>
   </div>
 </template>
 
 <script>
+import Loader from "./common/Loader.vue";
+import { getEventsList } from "../services/apiRequests";
+
 export default {
   name: 'EventDashboard',
-  props: {
-    msg: String
+  watch: {
+    "$route" (to, from) {
+      alert(to.params.eventId, from.params.eventId);
+    }
+  },
+  mounted() {
+    getEventsList()
+      .then(response => {
+        this.eventList = response.results;
+        this.eventCount = response.count;
+        }
+      );
+  },
+  data: function() {
+    return {
+        eventList: null,
+        eventCount: -1
+      };
+    },
+  methods: {
+    goEventDetail(eventId) {
+      this.$router.push(`/eventDetail/:${eventId}`);
+    } 
+  },
+   components: {
+    Loader
   }
 }
 </script>
@@ -44,19 +54,34 @@ export default {
 .dashboard-container{
   display: flex;
   flex-direction: column;
-  h3 {
-    margin: 40px 0 0;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
+  .card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+    .card {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    width: 40rem;
+    height: 8rem;
+    background: white;
+    margin: 1.5rem;
+    box-shadow: 0px 0px 0px grey;
+    -webkit-transition:  box-shadow .3s ease-out;
+    box-shadow: .8px .9px 3px grey;
+    border-radius: 6px;
+
+      &:hover {
+        box-shadow: 1px 8px 20px grey;
+        -webkit-transition:  box-shadow .3s ease-in;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        color: #42b983;
+      }
+    }
   }
 }
 </style>
