@@ -1,7 +1,7 @@
 <template>
   <div class="sessions-container">
     <h1> Listing all {{ sessionCount }} available sessions: </h1>
-    <h3 class="go-back" @click="() => goEventDetail()">Back to event details</h3>
+    <div class="go-back" @click="() => goEventDetail()">Back to event details</div>
     <div v-if="sessionDetails" class="sessions-container__detail">
       <div v-for="session in sessionDetails" :key="session.id" class="detail">
          <h2> {{ session.name }}</h2>
@@ -66,11 +66,10 @@ export default {
         sessionCount: null
       };
     },
+  
   methods: {
     goEventDetail() {
-      if (this.$router.params.eventId) {
-        this.$router.push(`eventDetail/${this.$router.params.eventId}`).catch(()=>{});
-        }
+      this.$router.go(-1);
     }
   },
   filters: {
@@ -80,7 +79,7 @@ export default {
   },
    components: {
     Loader
-  }
+  },
 }
 </script>
 
@@ -93,6 +92,12 @@ export default {
 
     .go-back {
       cursor: pointer;
+      margin: 1rem 0;
+      color: #42b983;
+      font-weight: bold;
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     &__loader{
